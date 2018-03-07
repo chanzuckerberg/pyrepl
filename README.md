@@ -1,10 +1,10 @@
 # pyrepl
 
-A JS package providing a bridge to a Python3 REPL. Primarily built to explore ability to move data between JS and Python at high speed, using shared memory on a single host.
+A JS package providing a single-host (OS local) bridge between Node (or Electron) and a Python3 execution kernel (similar to a Jupyter kernel). Primarily built to explore ability to move data between JS and Python at high speed, using shared memory.
 
-Very experimental and a work in progress.
+Experimental and a work in progress.
 
-Relies on [`mmap-io`](https://github.com/ozra/mmap-io) for JS implementation of a Posix-like mmap(2).
+Relies on [`mmap-io`](https://github.com/ozra/mmap-io) for JS implementation of Posix-like mmap(2).
 
 # Usage
 
@@ -57,8 +57,15 @@ def sum(x, y):
 main();
 ```
 
+See `__tests__` for more examples.
+
 # Tests
 
 ```
 npm test
 ```
+
+# Good to Know / Known Issues
+
+* Happy path known to work on Linux and Windows (if you can get mmap-io to build).
+* Untested on macOS.

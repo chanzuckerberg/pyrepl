@@ -1,7 +1,7 @@
 // Demo!
 // jshint esversion: 6
 
-const { PyShell, PyRepl, PyScope } = require("../pyrepl/pyrepl");
+const { PyShell, PyRepl, PyScope } = require("./pyrepl/pyrepl");
 
 async function main() {
   // the exec shell/repl
@@ -25,6 +25,7 @@ def sum(x, y):
   console.log("sum(8, 2) =>", await scope.eval("sum(8, 2)"));
 
   // Python exceptions become JS exceptions
+  console.log("Generating a python error...");
   try {
     await scope.eval("1+=+1");
   } catch (e) {
