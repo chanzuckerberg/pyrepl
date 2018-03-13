@@ -1,7 +1,7 @@
 // demo!
 // jshint esversion: 6
 
-const { PyShell, PyRepl, PyScope } = require("../../pyrepl/pyrepl");
+const { PyRepl, PyScope } = require("../../pyrepl/pyrepl");
 
 async function main() {
   // the exec shell/repl
