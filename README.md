@@ -59,6 +59,14 @@ main();
 
 See `__tests__` for more examples.
 
+# Demos
+
+_Note_: pyrepl depends on mmap-io, which is a node extension module (dynamically loaded shared library). This package must be built for individually for each node and electron version. When installed, it will automatically build against the system installed node version. You can use the `electron-rebuild` NPM script to rebuild it for the installed electron version, or `npm rebuild` to rebuild for the installed node version.
+
+* **simple.js**: Node demo showing basic functionality. To run: `node demos/node/simple.js`
+* **filter**: demonstrates embedding in a simple single-page web app. Because PyRepl depends on local inter-process communication, this example will only run within Electron. To run:
+  `node_modules/.bin/electron demos/electron/filter`
+
 # Tests
 
 ```
@@ -67,5 +75,5 @@ npm test
 
 # Good to Know / Known Issues
 
-* Happy path known to work on Linux and Windows (if you can get mmap-io to build).
+* Happy path known to work on Linux and Windows (if you can get mmap-io to build). On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
 * Untested on macOS.

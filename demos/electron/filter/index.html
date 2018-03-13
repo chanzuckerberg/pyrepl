@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PyRepl Filter Demo</title>
+</head>
+<body>
+
+  <h1>Python Filter Demo</h1>
+  <p>running python version: <span id="version"></span></p>
+
+</body>
+
+
+<script>
+// globals
+const { PyRepl, PyScope } = require("../../../pyrepl/pyrepl");
+const path = require("path");
+const os = require("os");
+let shell, scope;
+
+// initialize
+document.addEventListener("DOMContentLoaded", event => bootstrap());
+shell = new PyRepl({
+  verbose: true,
+  shmemName: path.join(os.tmpdir(), "shobj.mem"),
+  shmemSize: 100 * 1024 * 1024
+});
+shell.on("message", msg => onMessage(msg));
+
+async function bootstrap() {
+  scope = await shell.newScope("scope");
+
+  let versionElmt = document.getElementById("version");
+  let info;
+  try {
+    await scope.exec("import sys");
+    info = await scope.eval("[ x for x in sys.version_info ]");
+  } catch (e) {
+    info = e.message;
+  }
+  versionElmt.innerText = String(info);
+}
+
+function onMessage(msg) {
+  if (msg.content_type === "text/plain") {
+    // log all text events to the console for simplicity
+    console.log(msg.data);
+  } else {
+    // else we don't know how to handle it
+    console.log("oops, unsupported message type", msg);
+  }
+}
+</script>
+</html>
