@@ -184,8 +184,8 @@ class Codec {
     }
 
     this.shmem = null;
-    if (options.shmemName && options.shmemSize > 0) {
-      this.shmem = new Shmem(options.shmemName, options.shmemSize);
+    if (options.shmemPath && options.shmemSize > 0) {
+      this.shmem = new Shmem(options.shmemPath, options.shmemSize);
     }
   }
 

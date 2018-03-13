@@ -11,7 +11,7 @@ const options = [
     {
       codec: "json",
       shmemSize: 10 * 1024 * 1024,
-      shmemName: path.join(
+      shmemPath: path.join(
         os.tmpdir(),
         "shobj_" + crypto.randomBytes(8).toString("hex") + ".mem"
       )
@@ -22,7 +22,7 @@ const options = [
     {
       codec: "bson",
       shmemSize: 10 * 1024 * 1024,
-      shmemName: path.join(
+      shmemPath: path.join(
         os.tmpdir(),
         "shobj_" + crypto.randomBytes(8).toString("hex") + ".mem"
       )

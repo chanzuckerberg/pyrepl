@@ -21,15 +21,13 @@ class PyRuntimeError extends Error {
 class PyShell extends EventEmitter {
   constructor(script, scriptArgs = [], options = {}) {
     const defaultOptions = {
-      pythonPath: "python3", // the python executable path
+      pythonPath: "python", // the python executable path
       pythonOptions: [], // options passed to Python interpreter
-      verbose: false, // extra logging
-      codec: "json"
+      verbose: false // extra logging
     };
 
     super();
     this.script = script;
-    // this.options = { ...defaultOptions, ...options };  // XXX: sigh, hnsupported by Electron's version of V8
     this.options = Object.assign({}, defaultOptions, options);
 
     this.tid = 1;
@@ -151,12 +149,18 @@ class PyShell extends EventEmitter {
 
 class PyRepl extends PyShell {
   constructor(options = {}) {
+    const defaultOptions = {
+      codec: "bson"
+    };
+
+    options = Object.assign({}, defaultOptions, options);
+
     let scriptArgs = [];
     if (options.codec === "bson") {
       scriptArgs.push("-bson");
     }
-    if (options.shmemName && options.shmemSize > 0) {
-      scriptArgs.push("-mmap", options.shmemName);
+    if (options.shmemPath && options.shmemSize > 0) {
+      scriptArgs.push("-mmap", options.shmemPath);
     }
     const script = path.join(__dirname, "../repl/repl.py");
     super(script, scriptArgs, options);
