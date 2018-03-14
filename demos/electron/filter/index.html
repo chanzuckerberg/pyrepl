@@ -7,8 +7,17 @@
 <body>
 
   <h1>Python Filter Demo</h1>
-  <p>running python version: <span id="version"></span></p>
+  <p>running python version: <span id="version">loading...</span></p>
 
+  <form oninput="filterChange(event)">
+      <label>Filter: </label>
+      <input type="range" name="filter-slider" value="127" id="filter-slider" step="1" min="0" max="255">
+      <span>[ </span><span id="filter-value">127</span><span> ]</span>
+  </form>
+
+  <div>
+    <canvas id="image-out" width="640" height="480"></canvas>
+  </div>
 </body>
 
 
@@ -17,38 +26,116 @@
 const { PyRepl, PyScope } = require("../../../pyrepl/pyrepl");
 const path = require("path");
 const os = require("os");
+
+// globals
 let shell, scope;
 
 // initialize
 document.addEventListener("DOMContentLoaded", event => bootstrap());
-shell = new PyRepl({
-  verbose: true,
-  shmemName: path.join(os.tmpdir(), "shobj.mem"),
-  shmemSize: 100 * 1024 * 1024
-});
-shell.on("message", msg => onMessage(msg));
 
-async function bootstrap() {
+async function bootPython(reboot = false) {
+  if (reboot) {
+    // cleanup
+    scope = null;
+    shell.cleanup();
+    shell = null;
+  }
+
+  shell = new PyRepl({
+    verbose: true, // more or less logging
+    shmemPath: path.join(os.tmpdir(), "shobj.mem"),
+    shmemSize: 100 * 1024 * 1024
+  });
+  shell.on("message", msg => onMessage(msg));
+  shell.on("exit", msg => bootShell(true));
   scope = await shell.newScope("scope");
 
-  let versionElmt = document.getElementById("version");
+  // Set Python environment up as we expect it
+  pyProlog = `
+import sys
+import display
+import cv2
+import numpy as np
+img = cv2.imread('demos/electron/filter/horse.jpg')
+gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+display.send_image(cv2.cvtColor(gray_img, cv2.COLOR_GRAY2RGBA))
+`;
+  try {
+    await scope.exec(pyProlog);
+  } catch (e) {
+    console.log(e.message);
+  }
+}
+
+async function bootstrap() {
+  await bootPython(false);
+
+  // Look up Python version and display it (or the error message)
   let info;
   try {
-    await scope.exec("import sys");
+    let versionElmt = document.getElementById("version");
     info = await scope.eval("[ x for x in sys.version_info ]");
+    versionElmt.innerText = String(info);
   } catch (e) {
-    info = e.message;
+    console.log(e.message);
   }
-  versionElmt.innerText = String(info);
+
+  // Initial load of image we are filtering
 }
 
 function onMessage(msg) {
   if (msg.content_type === "text/plain") {
     // log all text events to the console for simplicity
-    console.log(msg.data);
+    console.log("message: ", msg.data);
+  } else if (msg.content_type === "image/ndarray") {
+    let wrap = scope.revive(msg, { returnFlatArray: true });
+    const target = "image-out";
+    imageBlit(
+      "image-out",
+      wrap.value.data,
+      wrap.value.shape[1],
+      wrap.value.shape[0]
+    );
+    wrap.finalize();
   } else {
     // else we don't know how to handle it
-    console.log("oops, unsupported message type", msg);
+    console.log("oops, unsupported message type: ", msg);
+  }
+}
+
+function imageBlit(target, ndarray, width, height) {
+  let canvas = document.getElementById(target);
+  let imgState = canvas.imgState;
+  if (!imgState) {
+    // initialize context & stash in the canvas
+    let context = canvas.getContext("2d");
+    imgState = {
+      width: width,
+      height: height,
+      context: context,
+      imageData: context.createImageData(width, height)
+    };
+    canvas.imgState = imgState;
+  }
+  imgState.imageData.data.set(ndarray);
+  imgState.context.putImageData(imgState.imageData, 0, 0);
+}
+
+async function filterChange(event) {
+  // XXX DEBOUNCE
+
+  const filterVal = event.target.valueAsNumber;
+  let filterValueElmt = document.getElementById("filter-value");
+  filterValueElmt.innerText = event.target.value;
+
+  const pyCode = `
+ret,thresh = cv2.threshold(gray_img,${filterVal},255,cv2.THRESH_BINARY)
+display.send_image(cv2.cvtColor(thresh, cv2.COLOR_GRAY2RGBA))
+`;
+  try {
+    await scope.exec(pyCode);
+  } catch (e) {
+    console.log(e.message);
   }
 }
 </script>
