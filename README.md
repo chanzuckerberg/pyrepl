@@ -77,4 +77,4 @@ npm test
 
 * Tests and demos known to work on Linux and Windows. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
 * Untested on macOS (let me know if you test it and it works)
-* The `electron` and `electron-rebuild` devDependencies are only required for the electron demos.
+* Many of the devDependencies packages are only needed for demos, eg, `lodash.throttle`, `electron`and`electron-rebuild`.

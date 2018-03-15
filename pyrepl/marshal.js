@@ -291,8 +291,6 @@ class Codec {
             options.copyOutOfShmem,
             options
           );
-          // XXX: cleanup
-          // return this.shmem.decode(val, options.copyOutOfShmem, options);
         }
       }
       return val; // default

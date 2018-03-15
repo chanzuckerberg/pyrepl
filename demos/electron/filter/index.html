@@ -26,6 +26,7 @@
 const { PyRepl, PyScope } = require("../../../pyrepl/pyrepl");
 const path = require("path");
 const os = require("os");
+const throttle = require("lodash.throttle");
 
 // globals
 let shell, scope;
@@ -121,22 +122,19 @@ function imageBlit(target, ndarray, width, height) {
   imgState.context.putImageData(imgState.imageData, 0, 0);
 }
 
-async function filterChange(event) {
-  // XXX DEBOUNCE
-
-  const filterVal = event.target.valueAsNumber;
-  let filterValueElmt = document.getElementById("filter-value");
-  filterValueElmt.innerText = event.target.value;
-
-  const pyCode = `
+const filterChange = throttle(
+  event => {
+    const filterVal = event.target.valueAsNumber;
+    let filterValueElmt = document.getElementById("filter-value");
+    filterValueElmt.innerText = event.target.value;
+    const pyCode = `
 ret,thresh = cv2.threshold(gray_img,${filterVal},255,cv2.THRESH_BINARY)
 display.send_image(cv2.cvtColor(thresh, cv2.COLOR_GRAY2RGBA))
 `;
-  try {
-    await scope.exec(pyCode);
-  } catch (e) {
-    console.log(e.message);
-  }
-}
+    scope.exec(pyCode);
+  },
+  50, // ms
+  { leading: true }
+);
 </script>
 </html>
