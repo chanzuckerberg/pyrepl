@@ -75,6 +75,6 @@ npm test
 
 # Good to Know / Known Issues
 
-* Happy path known to work on Linux and Windows (if you can get mmap-io to build). On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
-* Untested on macOS.
+* Tests and demos known to work on Linux and Windows. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
+* Untested on macOS (let me know if you test it and it works)
 * The `electron` and `electron-rebuild` devDependencies are only required for the electron demos.

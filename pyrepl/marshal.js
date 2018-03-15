@@ -142,6 +142,19 @@ class Shmem {
   cleanup() {
     delete this.mem;
     this.mem = null;
+
+    // Windows does not allow memory mapped files to be unlinked until
+    // the process no longer has the object mapped. The mmap-io package
+    // will not unmap the system object until the garbage collector is run.
+    //
+    // Note: electron exposes gc.  Node does not by default, so you will need
+    // to run it with --expose-gc
+    //
+    // So...
+    if (global && global.gc) {
+      global.gc();
+    }
+
     fs.existsSync(this.sysname) && fs.unlinkSync(this.sysname);
   }
 

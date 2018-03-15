@@ -4,7 +4,7 @@
   "description": "",
   "main": "pyrepl/pyrepl.js",
   "scripts": {
-    "test": "jest",
+    "test": "node --expose-gc node_modules/jest/bin/jest.js",
     "electron-rebuild": "electron-rebuild -f -w mmap-io"
   },
   "author": "",
@@ -21,8 +21,6 @@
     "electron-rebuild": "^1.7.3"
   },
   "jest": {
-    "testMatch": [
-      "**/__tests__/**/?(*.)(spec|test).js?(x)"
-    ]
+    "testMatch": ["**/__tests__/**/?(*.)(spec|test).js?(x)"]
   }
 }
