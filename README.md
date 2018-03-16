@@ -89,7 +89,6 @@ npm test
 
 # Good to Know / Known Issues
 
-* Tests and demos known to work on Linux and Windows. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
-* The `simple.js` demo has additionally been tested on macOS
-* Many of the devDependencies packages are only needed for demos, eg, `lodash.throttle`, `electron`and`electron-rebuild`.
+* Tests and demos known to work on Linux, Windows, and macOS. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
+* Many of the devDependencies packages are only needed for demos, eg, `lodash.throttle`, `electron`, and`electron-rebuild`.
 * If getting a `node-gyp` error during installation on macOS due to a `python` version issue try using the macOS default python using `npm config set python /usr/bin/python`
