@@ -8,7 +8,7 @@ Relies on [`mmap-io`](https://github.com/ozra/mmap-io) for JS implementation of 
 
 # Usage
 
-```
+```js
 const { PyShell, PyRepl, PyScope } = require("pyrepl/pyrepl");
 
 async function main() {
