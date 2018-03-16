@@ -8,7 +8,7 @@ Relies on [`mmap-io`](https://github.com/ozra/mmap-io) for JS implementation of 
 
 # Usage
 
-```
+```js
 const { PyShell, PyRepl, PyScope } = require("pyrepl/pyrepl");
 
 async function main() {
@@ -78,3 +78,4 @@ npm test
 * Tests and demos known to work on Linux and Windows. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
 * Untested on macOS (let me know if you test it and it works)
 * Many of the devDependencies packages are only needed for demos, eg, `lodash.throttle`, `electron`and`electron-rebuild`.
+* If getting a `node-gyp` error during installation on macOS due to a `python` version issue try using the macOS default python using `npm config set python /usr/bin/python`
