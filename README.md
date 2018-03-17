@@ -8,7 +8,7 @@ Relies on [`mmap-io`](https://github.com/ozra/mmap-io) for JS implementation of 
 
 # Usage
 
-```
+```js
 const { PyShell, PyRepl, PyScope } = require("pyrepl/pyrepl");
 
 async function main() {
@@ -61,11 +61,25 @@ See `__tests__` for more examples.
 
 # Demos
 
-_Note_: pyrepl depends on mmap-io, which is a node extension module (dynamically loaded shared library). This package must be built for individually for each node and electron version. When installed, it will automatically build against the system installed node version. You can use the `electron-rebuild` NPM script to rebuild it for the installed electron version, or `npm rebuild` to rebuild for the installed node version.
+Two demos are included:
 
-* **simple.js**: Node demo showing basic functionality. To run: `node demos/node/simple.js`
-* **filter**: demonstrates embedding in a simple single-page web app. Because PyRepl depends on local inter-process communication, this example will only run within Electron. To run:
-  `node_modules/.bin/electron demos/electron/filter`
+- **`simple.js`** shows basic functionality
+- **`filter`** demonstrates embedding in a single-page web app in Electron
+
+To run the simple demo, first install the dependencies for both `node` and `python` by cloning this repo and running the following commands from inside the top-level directory
+
+- `npm install`
+- `pip install -r requirements.txt`
+
+Then run the demo with
+
+`node demos/node/simple.js`
+
+To run the `filter` demo call
+
+`node_modules/.bin/electron demos/electron/filter`
+
+_Note_: pyrepl depends on mmap-io, which is a node extension module (dynamically loaded shared library). This package must be built for individually for each node and electron version. When installed, it will automatically build against the system installed node version. You can use the `electron-rebuild` NPM script to rebuild it for the installed electron version, or `npm rebuild` to rebuild for the installed node version.
 
 # Tests
 
@@ -75,6 +89,6 @@ npm test
 
 # Good to Know / Known Issues
 
-* Tests and demos known to work on Linux and Windows. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
-* Untested on macOS (let me know if you test it and it works)
-* Many of the devDependencies packages are only needed for demos, eg, `lodash.throttle`, `electron`and`electron-rebuild`.
+* Tests and demos known to work on Linux, Windows, and macOS. On Windows, you may find [Windows Build Tools](https://www.npmjs.com/package/windows-build-tools) useful.
+* Many of the devDependencies packages are only needed for demos, eg, `lodash.throttle`, `electron`, and`electron-rebuild`.
+* If getting a `node-gyp` error during installation on macOS due to a `python` version issue try using the macOS default python using `npm config set python /usr/bin/python`
