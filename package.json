@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "bson": "^1.0.4",
+    "bson": "^1.1.4",
     "mmap-io": "^1.0.0",
     "uuid": "^3.2.1"
   },
